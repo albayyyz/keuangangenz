@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Akun - Aplikasi Keuangan GenZ</title>
+    <link rel="stylesheet" href="ui.css">
+</head>
+<body>
+    <div class="login-container">
+        <button class="close-button" onclick="window.location.href='login.html'">✕</button>
+        
+        <div class="logo">
+            <h1>Buat Akun Baru</h1>
+            <p class="subtitle">Mulai kelola keuangan Anda</p>
+        </div>
+
+        <form id="registerForm" onsubmit="handleRegister(event)">
+            <div class="form-group">
+                <label for="nama_lengkap">Nama Lengkap</label>
+                <input 
+                    type="text" 
+                    id="nama_lengkap" 
+                    placeholder="Masukkan nama lengkap"
+                    required
+                    minlength="3"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    placeholder="Pilih username"
+                    required
+                    minlength="4"
+                    pattern="[a-zA-Z0-9_]+"
+                    title="Username hanya boleh berisi huruf, angka, dan underscore"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    placeholder="Buat password"
+                    required
+                    minlength="6"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Konfirmasi Password</label>
+                <input 
+                    type="password" 
+                    id="confirm_password" 
+                    placeholder="Ketik ulang password"
+                    required
+                    minlength="6"
+                >
+            </div>
+
+            <button type="submit" class="login-button" id="registerBtn">Daftar</button>
+            
+            <div class="success-message" id="successMessage">
+                ✓ Pendaftaran berhasil!
+            </div>
+        </form>
+
+        <div class="register-link">
+            <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost/keuangangenz/api';
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            
+            const nama = document.getElementById('nama_lengkap').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            
+            const submitBtn = document.getElementById('registerBtn');
+            const successMsg = document.getElementById('successMessage');
+
+            // Validasi password match
+            if (password !== confirmPassword) {
+                alert('Password dan konfirmasi password tidak cocok!');
+                return;
+            }
+
+            // Validasi panjang password
+            if (password.length < 6) {
+                alert('Password minimal 6 karakter!');
+                return;
+            }
+
+            // Disable button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Loading...';
+
+            try {
+                const response = await fetch(`${API_URL}/register.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nama_lengkap: nama,
+                        username: username,
+                        password: password
+                    })
+                });
+
+                const responseText = await response.text();
+                console.log('Response:', responseText);
+
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (parseError) {
+                    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        result = JSON.parse(jsonMatch[0]);
+                    } else {
+                        throw new Error('Response tidak valid dari server');
+                    }
+                }
+
+                if (result.status === 'success') {
+                    successMsg.classList.add('show');
+                    
+                    setTimeout(() => {
+                        alert('Pendaftaran berhasil! Silakan login.');
+                        window.location.href = 'login.html';
+                    }, 1000);
+                } else {
+                    alert(result.message || 'Pendaftaran gagal. Silakan coba lagi.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Daftar';
+                }
+
+            } catch (error) {
+                console.error('Register error:', error);
+                alert('Terjadi kesalahan: ' + error.message + '\n\nPastikan:\n1. XAMPP/Server PHP sudah berjalan\n2. Database keuangangenz sudah dibuat\n3. File API ada di folder yang benar');
+                
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Daftar';
+            }
+        }
+    </script>
+</body>
+</html>

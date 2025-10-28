@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Aplikasi Keuangan GenZ</title>
+    <link rel="stylesheet" href="ui.css">
+</head>
+<body>
+    <div class="login-container">
+        <button class="close-button" onclick="closeLogin()">✕</button>
+        
+        <div class="logo">
+            <h1>Selamat Datang di Aplikasi Keuangan GenZ</h1>
+            <p class="subtitle">Kelola keuangan dengan mudah</p>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    placeholder="Masukkan username"
+                    required
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Masukkan password"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button type="submit" class="login-button" id="loginBtn">Log in</button>
+            
+            <div class="success-message" id="successMessage">
+                ✓ Login berhasil!
+            </div>
+        </form>
+
+        <div class="register-link">
+            <p>Belum punya akun? <a href="register.html">Daftar di sini</a></p>
+        </div>
+    </div>
+
+    <script src="uiscript.js"></script>
+</body>
+</html>

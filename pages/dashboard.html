@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Aplikasi Keuangan GenZ</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="dashboard.css?v=2">
+    <link rel="stylesheet" href="notifikasi-profile.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button class="burger-menu" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <h2 class="app-title">Aplikasi Keuangan GenZ</h2>
+        </div>
+        <div class="navbar-right">
+            <button class="icon-btn" title="Notifikasi">🔔</button>
+            <button class="icon-btn" title="Profile">👤</button>
+        </div>
+    </nav>
+
+    <!-- Copy sidebar ini ke SEMUA file HTML (home.html, transaksi.html, laporan.html, riwayat.html) -->
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h3>Menu</h3>
+    </div>
+    <ul class="sidebar-menu">
+        <li class="menu-item">
+            <a href="home.html">
+                <span class="icon">🏠</span>
+                <span class="text">Home</span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="transaksi.html">
+                <span class="icon">💳</span>
+                <span class="text">Transaksi</span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="laporan.html">
+                <span class="icon">📊</span>
+                <span class="text">Laporan</span>
+            </a>
+        </li>
+        <li class="menu-item">
+            <a href="riwayat.html">
+                <span class="icon">📜</span>
+                <span class="text">Riwayat Transaksi</span>
+            </a>
+        </li>
+        <<!-- ✅ MENU EXPORT PDF - STRUKTUR BENAR -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" onclick="window.exportPDF(); return false;">
+                <span class="icon">📄</span>
+                <span class="text">Export PDF</span>
+            </a>
+        </li>
+    </ul>
+    
+    <div class="sidebar-footer">
+        <button class="clear-data-btn" onclick="clearAllData()">
+            <span class="icon">🗑️</span>
+            <span class="text">Hapus Semua Data</span>
+        </button>
+        
+        <button class="logout-btn" onclick="logout()">
+            <span class="icon">🚪</span>
+            <span class="text">Logout</span>
+        </button>
+    </div>
+</div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Home Page -->
+        <div class="page active" id="homePage">
+            <div class="page-header">
+                <h1>Recent Activity</h1>
+                <p class="date-info" id="currentDate"></p>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="card">
+                    <div class="card-icon">💰</div>
+                    <div class="card-content">
+                        <p class="card-label">Total Pemasukan</p>
+                        <h3 class="card-value" id="totalPemasukan">Rp 0</h3>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💸</div>
+                    <div class="card-content">
+                        <p class="card-label">Total Pengeluaran</p>
+                        <h3 class="card-value" id="totalPengeluaran">Rp 0</h3>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💵</div>
+                    <div class="card-content">
+                        <p class="card-label">Saldo</p>
+                        <h3 class="card-value" id="saldo">Rp 0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Controls -->
+            <div class="chart-controls">
+                <button class="btn-period active" onclick="changeChartPeriod(7)">7 Hari</button>
+                <button class="btn-period" onclick="changeChartPeriod(14)">14 Hari</button>
+                <button class="btn-period" onclick="changeChartPeriod(30)">30 Hari</button>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-container">
+                <div class="chart-box">
+                    <h3>Grafik Pemasukan</h3>
+                    <canvas id="pemasukanChart"></canvas>
+                </div>
+                <div class="chart-box">
+                    <h3>Grafik Pengeluaran</h3>
+                    <canvas id="pengeluaranChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Catatan Pengeluaran -->
+            <div class="notes-section">
+                <div class="section-header">
+                    <h3>Catatan Pengeluaran Bulan Ini</h3>
+                    <button class="btn-add" onclick="showTransaksiForm()">+ Tambah</button>
+                </div>
+                <div class="notes-table">
+                    <table id="pengeluaranTable">
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Kategori</th>
+                                <th>Deskripsi</th>
+                                <th>Jumlah</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pengeluaranTableBody">
+                            <!-- Data akan diisi oleh JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaksi Page -->
+        <div class="page" id="transaksiPage">
+            <div class="page-header">
+                <h1>Tambah Transaksi</h1>
+            </div>
+            <div class="form-container">
+                <form id="transaksiForm">
+                    <div class="form-group">
+                        <label>Tipe Transaksi</label>
+                        <select id="tipeTransaksi" required>
+                            <option value="">Pilih Tipe</option>
+                            <option value="pemasukan">Pemasukan</option>
+                            <option value="pengeluaran">Pengeluaran</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Kategori</label>
+                        <select id="kategori" required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="gaji">Gaji</option>
+                            <option value="bonus">Bonus</option>
+                            <option value="makanan">Makanan</option>
+                            <option value="transport">Transport</option>
+                            <option value="belanja">Belanja</option>
+                            <option value="hiburan">Hiburan</option>
+                            <option value="lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jumlah</label>
+                        <input type="number" id="jumlah" placeholder="Masukkan jumlah" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input type="date" id="tanggal" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Deskripsi</label>
+                        <textarea id="deskripsi" placeholder="Catatan tambahan" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Simpan Transaksi</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Laporan Page -->
+        <div class="page" id="laporanPage">
+            <div class="page-header">
+                <h1>Laporan Keuangan</h1>
+            </div>
+            <p>Halaman Laporan akan ditampilkan di sini</p>
+        </div>
+
+        <!-- Riwayat Page -->
+        <div class="page" id="riwayatPage">
+            <div class="page-header">
+                <h1>Riwayat Transaksi</h1>
+            </div>
+            <p>Halaman Riwayat akan ditampilkan di sini</p>
+        </div>
+    </div>
+
+    <!-- ==================== -->
+    <!-- Bagian Ubah Password -->
+
+    <div class="dashboard-container">
+        <div class="ubah-password-container">
+          <h3>Ubah Password</h3>
+          <input type="password" id="oldPassword" placeholder="Password Lama" />
+          <input type="password" id="newPassword" placeholder="Password Baru" />
+          <button onclick="ubahPassword()">Ubah Password</button>
+        </div>
+    </div>
+
+    <script>
+async function cekSession() {
+  const res = await fetch("../API/check_session.php");
+  const data = await res.json();
+
+  if (data.status === "not_logged_in") {
+    alert("Silakan login terlebih dahulu!");
+    window.location.href = "login.html";
+  } else {
+    document.getElementById("namaUser").textContent = data.user.nama_lengkap;
+  }
+}
+
+async function logout() {
+  const res = await fetch("../API/logout.php");
+  const data = await res.json();
+  alert(data.message);
+  window.location.href = "login.html";
+}
+
+// Panggil saat halaman dimuat
+window.onload = cekSession;
+</script>
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="global.js"></script>
+<script src="export-pdf.js"></script>
+<script src="home.js"></script>
+
+<!-- Test Export PDF -->
+<script>
+    console.log('=== CHECKING EXPORT PDF ===');
+    console.log('1. jsPDF:', typeof window.jspdf);
+    console.log('2. exportPDF:', typeof window.exportPDF);
+    console.log('3. getTransaksiData:', typeof getTransaksiData);
+    
+    if (typeof window.exportPDF !== 'function') {
+        console.error('❌ EXPORT PDF NOT WORKING!');
+    } else {
+        console.log('✅ Export PDF ready!');
+    }
+</script>
+<!-- ✅ TAMBAHKAN INI SEBELUM </body> di SEMUA FILE HTML -->
+
+<!-- Notifications & Profile Script -->
+<script src="notifikasi-profile.js"></script>
+
+<!-- Setup Event Listeners untuk Notifikasi & Profile -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔔 Setting up Notification & Profile listeners...');
+    
+    // Notification Button
+    const notifBtn = document.querySelector('[title="Notifikasi"]');
+    if (notifBtn) {
+        notifBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🔔 Opening notifications...');
+            
+            if (typeof showNotifications === 'function') {
+                showNotifications();
+            } else {
+                console.error('❌ showNotifications function not found!');
+            }
+        });
+        console.log('✅ Notification button listener attached');
+    }
+    
+    // Profile Button
+    const profileBtn = document.querySelector('[title="Profile"]');
+    if (profileBtn) {
+        profileBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('👤 Opening profile...');
+            
+            if (typeof showProfile === 'function') {
+                showProfile();
+            } else {
+                console.error('❌ showProfile function not found!');
+            }
+        });
+        console.log('✅ Profile button listener attached');
+    }
+});
+</script>
+<!-- 1. Library Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- 2. App Scripts - URUTAN PENTING! -->
+<script src="global.js"></script>
+<script src="export-pdf.js"></script>
+<script src="notifikasi-profile.js"></script> <!-- HARUS ADA! -->
+<script src="home.js"></script> <!-- atau transaksi.js, laporan.js, dll -->
+
+<!-- 3. Test Script (opsional, untuk debugging) -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🧪 Testing functions...');
+    console.log('showProfileSettings:', typeof window.showProfileSettings);
+    console.log('saveProfileSettings:', typeof window.saveProfileSettings);
+    console.log('changePassword:', typeof window.changePassword);
+    
+    if (typeof window.showProfileSettings !== 'function') {
+        console.error('❌ showProfileSettings NOT FOUND!');
+        console.error('⚠️ Check if notifikasi-profile.js is loaded!');
+    } else {
+        console.log('✅ All profile functions loaded successfully!');
+    }
+});
+</script>
+
+<!-- 4. Event Listeners untuk Icon -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Notification Button
+    const notifBtn = document.querySelector('[title="Notifikasi"]');
+    if (notifBtn) {
+        notifBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (typeof window.showNotifications === 'function') {
+                window.showNotifications();
+            } else {
+                console.error('❌ showNotifications not found!');
+            }
+        });
+    }
+    
+    // Profile Button
+    const profileBtn = document.querySelector('[title="Profile"]');
+    if (profileBtn) {
+        profileBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (typeof window.showProfile === 'function') {
+                window.showProfile();
+            } else {
+                console.error('❌ showProfile not found!');
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
+</body>
+</html>

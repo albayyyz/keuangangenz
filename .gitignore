@@ -1,0 +1,22 @@
+# Ignore config dengan password database
+api/config.php
+
+# Ignore file temporary
+*.tmp
+*.log
+*.swp
+*~
+
+# Ignore folder uploads
+uploads/
+temp/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.sublime-workspace

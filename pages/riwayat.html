@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Transaksi - Aplikasi Keuangan GenZ</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="notifikasi-profile.css">
+    <style>
+        /* Additional styles for Riwayat page */
+        .riwayat-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin: 20px 0 30px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+        }
+        
+        .stat-content {
+            flex: 1;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 50px 12px 45px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>');
+            background-repeat: no-repeat;
+            background-position: 15px center;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #4ade80;
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+        }
+        
+        .clear-search {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .clear-search:hover {
+            background: #dc2626;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .clear-search.show {
+            display: flex;
+        }
+        
+        .filter-group select {
+            padding: 12px 40px 12px 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+        
+        .filter-group select:focus {
+            outline: none;
+            border-color: #4ade80;
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+        }
+        
+        .btn-filter {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-filter:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button class="burger-menu" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <h2 class="app-title">Aplikasi Keuangan GenZ</h2>
+        </div>
+        <div class="navbar-right">
+            <button class="icon-btn" title="Notifikasi">🔔</button>
+            <button class="icon-btn" title="Profile">👤</button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="menu-item">
+                <a href="home.html">
+                    <span class="icon">🏠</span>
+                    <span class="text">Home</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="transaksi.html">
+                    <span class="icon">💳</span>
+                    <span class="text">Transaksi</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="laporan.html">
+                    <span class="icon">📊</span>
+                    <span class="text">Laporan</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a href="riwayat.html">
+                    <span class="icon">📜</span>
+                    <span class="text">Riwayat Transaksi</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0)" id="exportPdfBtn">
+                    <span class="icon">📄</span>
+                    <span class="text">Export PDF</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <button class="clear-data-btn" onclick="clearAllData()">
+                <span class="icon">🗑️</span>
+                <span class="text">Hapus Semua Data</span>
+            </button>
+            
+            <button class="logout-btn" onclick="logout()">
+                <span class="icon">🚪</span>
+                <span class="text">Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="page-header">
+            <h1>📜 Riwayat Transaksi</h1>
+            <p class="date-info">Semua transaksi yang pernah dilakukan</p>
+        </div>
+
+        <!-- Statistics will be inserted here by JavaScript -->
+        
+        <!-- Filter & Search -->
+        <div class="filter-section">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Cari transaksi..."
+                >
+                <button class="clear-search" id="clearSearch" title="Hapus pencarian">✕</button>
+            </div>
+            <div class="filter-group">
+                <select id="filterTipe">
+                    <option value="">🔄 Semua Tipe</option>
+                    <option value="pemasukan">💰 Pemasukan</option>
+                    <option value="pengeluaran">💸 Pengeluaran</option>
+                </select>
+            </div>
+            <button class="btn-filter" id="refreshBtn" title="Refresh data">
+                🔄 Refresh
+            </button>
+        </div>
+
+        <!-- Tabel Riwayat -->
+        <div class="notes-section">
+            <div class="notes-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>📅 Tanggal</th>
+                            <th>🏷️ Tipe</th>
+                            <th>📁 Kategori</th>
+                            <th>📝 Deskripsi</th>
+                            <th>💵 Jumlah</th>
+                            <th>⚙️ Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="riwayatTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 40px;">
+                                <div style="font-size: 2rem;">⏳</div>
+                                <div style="margin-top: 10px; color: #666;">Memuat data...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts - Load ONCE -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="global.js"></script>
+    <script src="export-pdf.js"></script>
+    <script src="notifikasi-profile.js"></script>
+    <script src="riwayat.js"></script>
+    
+    <!-- Event Listeners -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 Setting up event listeners...');
+            
+            // Export PDF
+            const exportBtn = document.getElementById('exportPdfBtn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const fn = window.exportPDF || exportPDF;
+                    if (typeof fn === 'function') fn();
+                    else alert('⚠️ Export PDF tidak tersedia');
+                });
+            }
+            
+            // Search with clear button
+            const searchInput = document.getElementById('searchInput');
+            const clearSearchBtn = document.getElementById('clearSearch');
+            
+            if (searchInput) {
+                let searchTimeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(searchTimeout);
+                    
+                    if (this.value.length > 0) {
+                        clearSearchBtn.classList.add('show');
+                    } else {
+                        clearSearchBtn.classList.remove('show');
+                    }
+                    
+                    searchTimeout = setTimeout(() => {
+                        if (typeof searchTransaksi === 'function') searchTransaksi();
+                    }, 300);
+                });
+            }
+            
+            if (clearSearchBtn) {
+                clearSearchBtn.addEventListener('click', function() {
+                    searchInput.value = '';
+                    clearSearchBtn.classList.remove('show');
+                    searchInput.focus();
+                    if (typeof searchTransaksi === 'function') searchTransaksi();
+                });
+            }
+            
+            // Filter
+            const filterTipe = document.getElementById('filterTipe');
+            if (filterTipe) {
+                filterTipe.addEventListener('change', function() {
+                    if (typeof filterTransaksi === 'function') filterTransaksi();
+                });
+            }
+            
+            // Refresh
+            const refreshBtn = document.getElementById('refreshBtn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', function() {
+                    refreshBtn.disabled = true;
+                    refreshBtn.innerHTML = '⏳ Loading...';
+                    
+                    if (typeof loadRiwayatTransaksi === 'function') {
+                        loadRiwayatTransaksi().then(() => {
+                            refreshBtn.disabled = false;
+                            refreshBtn.innerHTML = '✅ Refreshed!';
+                            setTimeout(() => {
+                                refreshBtn.innerHTML = '🔄 Refresh';
+                            }, 1500);
+                        });
+                    }
+                });
+            }
+            
+            // Notification
+            const notifBtn = document.querySelector('[title="Notifikasi"]');
+            if (notifBtn) {
+                notifBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const fn = window.showNotifications || showNotifications;
+                    if (typeof fn === 'function') fn();
+                });
+            }
+            
+            // Profile
+            const profileBtn = document.querySelector('[title="Profile"]');
+            if (profileBtn) {
+                profileBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const fn = window.showProfile || showProfile;
+                    if (typeof fn === 'function') fn();
+                });
+            }
+            
+            console.log('✅ All listeners attached');
+        });
+    </script>
+</body>
+</html>

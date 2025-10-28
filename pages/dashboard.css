@@ -1,0 +1,659 @@
+/* dashboard.css - Hijau Tosca + Pink Theme */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #4ade80 0%, #ec4899 100%); /* ✅ Hijau tosca + Pink */
+    min-height: 100vh;
+}
+
+/* Navbar Styles */
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.app-title {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0;
+}
+
+/* Burger Menu Button - ✅ Hijau tosca + Pink */
+.burger-menu {
+    background: linear-gradient(135deg, #4ade80 0%, #ec4899 100%);
+    border: none;
+    color: white;
+    width: 45px;
+    height: 45px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 0;
+}
+
+.burger-menu span {
+    width: 22px;
+    height: 2px;
+    background: white;
+    display: block;
+    transition: all 0.3s;
+}
+
+.burger-menu:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4); /* ✅ Hijau tosca shadow */
+}
+
+.burger-menu:active {
+    transform: scale(0.95);
+}
+
+/* Icon Buttons */
+.icon-btn {
+    background: transparent;
+    border: 2px solid #e5e7eb;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+}
+
+.icon-btn:hover {
+    background: #f3f4f6;
+    border-color: #4ade80; /* ✅ Hijau tosca */
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    width: 300px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #4ade80 0%, #ec4899 100%); /* ✅ Hijau tosca + Pink */
+    color: white;
+}
+
+.sidebar-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 20px 0;
+}
+
+.menu-item {
+    margin: 0;
+}
+
+.menu-item a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s;
+    border-left: 4px solid transparent;
+}
+
+.menu-item:hover a {
+    background: rgba(74, 222, 128, 0.1); /* ✅ Hijau tosca hover */
+    border-left-color: #4ade80;
+}
+
+.menu-item.active a {
+    background: rgba(74, 222, 128, 0.15);
+    border-left-color: #4ade80;
+    font-weight: 600;
+    color: #4ade80;
+}
+
+.menu-item .icon {
+    font-size: 1.3rem;
+    margin-right: 12px;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.logout-btn {
+    width: 100%;
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.logout-btn:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* Main Content */
+.main-content {
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.date-info {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+}
+
+/* Summary Cards */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+}
+
+.card-content {
+    flex: 1;
+}
+
+.card-label {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.card-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Chart Controls */
+.chart-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn-period {
+    padding: 10px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.btn-period:hover,
+.btn-period.active {
+    background: white;
+    color: #4ade80; /* ✅ Hijau tosca */
+    border-color: white;
+}
+
+/* Charts Container */
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.chart-box {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chart-box h3 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+/* Notes Section */
+.notes-section {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h3 {
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.btn-add {
+    background: linear-gradient(135deg, #4ade80 0%, #ec4899 100%); /* ✅ Hijau tosca + Pink */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4); /* ✅ Hijau tosca shadow */
+}
+
+/* Tables */
+.notes-table {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f9fafb;
+}
+
+th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+tbody tr:hover {
+    background: #f9fafb;
+}
+
+/* Forms */
+.form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #4ade80; /* ✅ Hijau tosca */
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #4ade80 0%, #ec4899 100%); /* ✅ Hijau tosca + Pink */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4); /* ✅ Hijau tosca shadow */
+}
+
+/* Filter Section */
+.filter-section {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-box input {
+    padding: 10px 15px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    width: 300px;
+    transition: all 0.3s;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-group select {
+    padding: 10px 15px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-filter {
+    padding: 10px 20px;
+    background: #4ade80; /* ✅ Hijau tosca */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* Badges */
+.badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.badge.pemasukan {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.badge.pengeluaran {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Text Colors */
+.income {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.expense {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+/* Buttons */
+.btn-delete {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 0.9rem;
+}
+
+.btn-delete:hover {
+    background: #dc2626;
+}
+
+/* Laporan */
+.laporan-summary {
+    margin-bottom: 30px;
+}
+
+.summary-card-large {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card-large h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.summary-item .label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.summary-item .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.kategori-section {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.kategori-section h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 280px;
+        left: -280px;
+    }
+    
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .app-title {
+        font-size: 1.2rem;
+    }
+    
+    .search-box input {
+        width: 100%;
+    }
+    
+    .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.clear-data-btn {
+    width: 100%;
+    background: #f59e0b;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.clear-data-btn:hover {
+    background: #d97706;
+    transform: translateY(-2px);
+}
+
+/* Chart sizing untuk laporan */
+.kategori-section canvas {
+    max-width: 400px !important;
+    max-height: 400px !important;
+    margin: 0 auto;
+    display: block;
+}
+
+.kategori-section .chartjs-legend,
+.kategori-section .chart-legend {
+    font-size: 14px !important;
+}
+
+/* Kategori Detail Styling */
+.kategori-detail {
+    margin-top: 30px;
+}
+
+.kategori-detail table {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.kategori-detail table tr:hover {
+    background: #f3f4f6 !important;
+    transition: all 0.2s;
+}
+

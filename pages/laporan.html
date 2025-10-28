@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan - Aplikasi Keuangan GenZ</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="notifikasi-profile.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button class="burger-menu" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <h2 class="app-title">Aplikasi Keuangan GenZ</h2>
+        </div>
+        <div class="navbar-right">
+            <button class="icon-btn" title="Notifikasi">🔔</button>
+            <button class="icon-btn" title="Profile">👤</button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="menu-item">
+                <a href="home.html">
+                    <span class="icon">🏠</span>
+                    <span class="text">Home</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="transaksi.html">
+                    <span class="icon">💳</span>
+                    <span class="text">Transaksi</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a href="laporan.html">
+                    <span class="icon">📊</span>
+                    <span class="text">Laporan</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="riwayat.html">
+                    <span class="icon">📜</span>
+                    <span class="text">Riwayat Transaksi</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0)" id="exportPdfBtn">
+                    <span class="icon">📄</span>
+                    <span class="text">Export PDF</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <button class="clear-data-btn" onclick="clearAllData()">
+                <span class="icon">🗑️</span>
+                <span class="text">Hapus Semua Data</span>
+            </button>
+            
+            <button class="logout-btn" onclick="logout()">
+                <span class="icon">🚪</span>
+                <span class="text">Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="page-header">
+            <h1>Laporan Keuangan</h1>
+            <p class="date-info">Analisis keuangan bulanan</p>
+        </div>
+
+        <!-- Filter Laporan -->
+        <div class="filter-section">
+            <div class="filter-group">
+                <label>Pilih Bulan:</label>
+                <select id="filterBulan" onchange="generateLaporan()">
+                    <option value="01">Januari 2025</option>
+                    <option value="02">Februari 2025</option>
+                    <option value="03">Maret 2025</option>
+                    <option value="04">April 2025</option>
+                    <option value="05">Mei 2025</option>
+                    <option value="06">Juni 2025</option>
+                    <option value="07">Juli 2025</option>
+                    <option value="08">Agustus 2025</option>
+                    <option value="09">September 2025</option>
+                    <option value="10">Oktober 2025</option>
+                    <option value="11">November 2025</option>
+                    <option value="12">Desember 2025</option>
+                </select>
+            </div>
+            <button class="btn-filter" onclick="generateLaporan()">🔄 Refresh Laporan</button>
+        </div>
+
+        <!-- Summary Laporan -->
+        <div class="laporan-summary">
+            <div class="summary-card-large">
+                <h3>Ringkasan Bulan Ini</h3>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <span class="label">Total Pemasukan:</span>
+                        <span class="value income" id="laporanPemasukan">Rp 0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Total Pengeluaran:</span>
+                        <span class="value expense" id="laporanPengeluaran">Rp 0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">Selisih:</span>
+                        <span class="value" id="laporanSelisih">Rp 0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kategori Terbesar -->
+        <div class="kategori-section">
+            <h3>Pengeluaran per Kategori</h3>
+            <canvas id="kategoriChart"></canvas>
+        </div>
+    </div>
+
+      <!-- Scripts - Load ONCE -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="global.js"></script>
+    <script src="export-pdf.js"></script>
+    <script src="notifikasi-profile.js"></script>
+    <script src="laporan.js"></script>
+    
+    <!-- Event Listeners -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Export PDF
+            const exportBtn = document.getElementById('exportPdfBtn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const fn = window.exportPDF || exportPDF;
+                    if (typeof fn === 'function') fn();
+                    else alert('⚠️ Export PDF tidak tersedia');
+                });
+            }
+            
+            // Notification
+            const notifBtn = document.querySelector('[title="Notifikasi"]');
+            if (notifBtn) {
+                notifBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const fn = window.showNotifications || showNotifications;
+                    if (typeof fn === 'function') fn();
+                });
+            }
+            
+            // Profile
+            const profileBtn = document.querySelector('[title="Profile"]');
+            if (profileBtn) {
+                profileBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const fn = window.showProfile || showProfile;
+                    if (typeof fn === 'function') fn();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

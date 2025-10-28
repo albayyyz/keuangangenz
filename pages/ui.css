@@ -1,0 +1,258 @@
+/* ui.css - Login & Register Page Styling */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated background circles */
+body::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(74, 222, 128, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -200px;
+    left: -200px;
+    animation: float 20s infinite ease-in-out;
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    bottom: -150px;
+    right: -150px;
+    animation: float 15s infinite ease-in-out reverse;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(50px, 50px) scale(1.1);
+    }
+}
+
+.login-container {
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 60px 50px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo h1 {
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #333;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group input::placeholder {
+    color: #999;
+}
+
+.form-group input:focus {
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.3);
+    transform: translateY(-2px);
+}
+
+.login-button {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #4ade80 0%, #ec4899 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.login-button:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(74, 222, 128, 0.4);
+}
+
+.login-button:active {
+    transform: translateY(-1px);
+}
+
+.login-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: white;
+    font-size: 20px;
+}
+
+.close-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.success-message {
+    display: none;
+    text-align: center;
+    color: #4ade80;
+    margin-top: 20px;
+    font-size: 14px;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.success-message.show {
+    display: block;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.register-link p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #4ade80;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+    color: #22c55e;
+    text-decoration: underline;
+}
+
+/* ===== CRITICAL: Hide all dashboard elements on login/register pages ===== */
+.navbar,
+.sidebar,
+.main-content,
+nav,
+aside,
+.burger-menu,
+.icon-btn,
+.summary-cards,
+.chart-controls,
+.charts-container,
+.notes-section,
+table,
+.filter-section {
+    display: none !important;
+}
+
+/* Only show login container */
+body > *:not(.login-container) {
+    display: none !important;
+}
+
+body > .login-container {
+    display: block !important;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .login-container {
+        padding: 40px 30px;
+        max-width: 90%;
+    }
+    
+    .logo h1 {
+        font-size: 28px;
+    }
+}

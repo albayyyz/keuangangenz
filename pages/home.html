@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Aplikasi Keuangan GenZ</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="notifikasi-profile.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button class="burger-menu" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <h2 class="app-title">Aplikasi Keuangan GenZ</h2>
+        </div>
+        <div class="navbar-right">
+            <button class="icon-btn" title="Notifikasi">🔔</button>
+            <button class="icon-btn" title="Profile">👤</button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="menu-item active">
+                <a href="home.html">
+                    <span class="icon">🏠</span>
+                    <span class="text">Home</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="transaksi.html">
+                    <span class="icon">💳</span>
+                    <span class="text">Transaksi</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="laporan.html">
+                    <span class="icon">📊</span>
+                    <span class="text">Laporan</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="riwayat.html">
+                    <span class="icon">📜</span>
+                    <span class="text">Riwayat Transaksi</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0)" id="exportPdfBtn">
+                    <span class="icon">📄</span>
+                    <span class="text">Export PDF</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <button class="clear-data-btn" onclick="clearAllData()">
+                <span class="icon">🗑️</span>
+                <span class="text">Hapus Semua Data</span>
+            </button>
+            
+            <button class="logout-btn" onclick="logout()">
+                <span class="icon">🚪</span>
+                <span class="text">Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="page-header">
+            <h1>Recent Activity</h1>
+            <p class="date-info" id="currentDate"></p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="card">
+                <div class="card-icon">💰</div>
+                <div class="card-content">
+                    <p class="card-label">Total Pemasukan</p>
+                    <h3 class="card-value" id="totalPemasukan">Rp 0</h3>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon">💸</div>
+                <div class="card-content">
+                    <p class="card-label">Total Pengeluaran</p>
+                    <h3 class="card-value" id="totalPengeluaran">Rp 0</h3>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-icon">💵</div>
+                <div class="card-content">
+                    <p class="card-label">Saldo</p>
+                    <h3 class="card-value" id="saldo">Rp 0</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Controls -->
+        <div class="chart-controls">
+            <button class="btn-period active" onclick="changeChartPeriod(7)">7 Hari</button>
+            <button class="btn-period" onclick="changeChartPeriod(14)">14 Hari</button>
+            <button class="btn-period" onclick="changeChartPeriod(30)">30 Hari</button>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-container">
+            <div class="chart-box">
+                <h3>Grafik Pemasukan</h3>
+                <canvas id="pemasukanChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3>Grafik Pengeluaran</h3>
+                <canvas id="pengeluaranChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Catatan Pengeluaran -->
+        <div class="notes-section">
+            <div class="section-header">
+                <h3>Catatan Pengeluaran Bulan Ini</h3>
+                <a href="transaksi.html" class="btn-add">+ Tambah</a>
+            </div>
+            <div class="notes-table">
+                <table id="pengeluaranTable">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Kategori</th>
+                            <th>Deskripsi</th>
+                            <th>Jumlah</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pengeluaranTableBody">
+                        <!-- Data akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ LIBRARY SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- ✅ APP SCRIPTS - Load ONCE in correct order -->
+    <script src="global.js"></script>
+    <script src="export-pdf.js"></script>
+    <script src="notifikasi-profile.js"></script>
+    <script src="home.js"></script>
+    
+    <!-- ✅ Event Listeners Setup -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 Setting up event listeners...');
+            
+            // Export PDF Button
+            const exportBtn = document.getElementById('exportPdfBtn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const fn = window.exportPDF || exportPDF;
+                    if (typeof fn === 'function') {
+                        fn();
+                    } else {
+                        alert('⚠️ Export PDF tidak tersedia');
+                    }
+                });
+            }
+            
+            // Notification Button
+            const notifBtn = document.querySelector('[title="Notifikasi"]');
+            if (notifBtn) {
+                notifBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const fn = window.showNotifications || showNotifications;
+                    if (typeof fn === 'function') fn();
+                });
+            }
+            
+            // Profile Button
+            const profileBtn = document.querySelector('[title="Profile"]');
+            if (profileBtn) {
+                profileBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const fn = window.showProfile || showProfile;
+                    if (typeof fn === 'function') fn();
+                });
+            }
+            
+            console.log('✅ All listeners attached');
+        });
+    </script>
+</body>
+</html>

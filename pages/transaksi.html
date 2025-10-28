@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaksi - Aplikasi Keuangan GenZ</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="notifikasi-profile.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button class="burger-menu" onclick="toggleSidebar()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <h2 class="app-title">Aplikasi Keuangan GenZ</h2>
+        </div>
+        <div class="navbar-right">
+            <button class="icon-btn" title="Notifikasi">🔔</button>
+            <button class="icon-btn" title="Profile">👤</button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="menu-item">
+                <a href="home.html">
+                    <span class="icon">🏠</span>
+                    <span class="text">Home</span>
+                </a>
+            </li>
+            <li class="menu-item active">
+                <a href="transaksi.html">
+                    <span class="icon">💳</span>
+                    <span class="text">Transaksi</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="laporan.html">
+                    <span class="icon">📊</span>
+                    <span class="text">Laporan</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="riwayat.html">
+                    <span class="icon">📜</span>
+                    <span class="text">Riwayat Transaksi</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="javascript:void(0)" id="exportPdfBtn">
+                    <span class="icon">📄</span>
+                    <span class="text">Export PDF</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="sidebar-footer">
+            <button class="clear-data-btn" onclick="clearAllData()">
+                <span class="icon">🗑️</span>
+                <span class="text">Hapus Semua Data</span>
+            </button>
+            
+            <button class="logout-btn" onclick="logout()">
+                <span class="icon">🚪</span>
+                <span class="text">Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="page-header">
+            <h1>💳 Tambah Transaksi</h1>
+            <p class="date-info">Input transaksi pemasukan atau pengeluaran</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="transaksiForm">
+                <div class="form-group">
+                    <label>Tipe Transaksi</label>
+                    <select id="tipeTransaksi" required>
+                        <option value="">Pilih Tipe</option>
+                        <option value="pemasukan">💰 Pemasukan</option>
+                        <option value="pengeluaran">💸 Pengeluaran</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select id="kategori" required>
+                        <option value="">Pilih Kategori</option>
+                        <option value="gaji">💼 Gaji</option>
+                        <option value="bonus">🎁 Bonus</option>
+                        <option value="investasi">📈 Investasi</option>
+                        <option value="makanan">🍔 Makanan</option>
+                        <option value="transport">🚗 Transport</option>
+                        <option value="belanja">🛒 Belanja</option>
+                        <option value="hiburan">🎮 Hiburan</option>
+                        <option value="tagihan">📄 Tagihan</option>
+                        <option value="kesehatan">🏥 Kesehatan</option>
+                        <option value="lainnya">📦 Lainnya</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Jumlah</label>
+                    <input type="number" id="jumlah" placeholder="Masukkan jumlah" required min="0" step="1000">
+                </div>
+                <div class="form-group">
+                    <label>Tanggal</label>
+                    <input type="date" id="tanggal" required>
+                </div>
+                <div class="form-group">
+                    <label>Deskripsi</label>
+                    <textarea id="deskripsi" placeholder="Catatan tambahan (opsional)" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">💾 Simpan Transaksi</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts - Load ONCE -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="global.js"></script>
+    <script src="export-pdf.js"></script>
+    <script src="notifikasi-profile.js"></script>
+    <script src="transaksi.js"></script>
+    
+    <!-- Event Listeners -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Export PDF
+            const exportBtn = document.getElementById('exportPdfBtn');
+            if (exportBtn) {
+                exportBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const fn = window.exportPDF || exportPDF;
+                    if (typeof fn === 'function') fn();
+                    else alert('⚠️ Export PDF tidak tersedia');
+                });
+            }
+            
+            // Notification
+            const notifBtn = document.querySelector('[title="Notifikasi"]');
+            if (notifBtn) {
+                notifBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const fn = window.showNotifications || showNotifications;
+                    if (typeof fn === 'function') fn();
+                });
+            }
+            
+            // Profile
+            const profileBtn = document.querySelector('[title="Profile"]');
+            if (profileBtn) {
+                profileBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const fn = window.showProfile || showProfile;
+                    if (typeof fn === 'function') fn();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
