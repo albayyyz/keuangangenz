@@ -55,23 +55,6 @@ define('DB_NAME', 'keuangangenz');
 4. Cek **laporan** untuk analisis per kategori
 5. Export **PDF** untuk dokumentasi
 
-## 📸 Screenshot
-
-### Login Page
-![Login](screenshots/login.png)
-
-### Dashboard
-![Dashboard](screenshots/dashboard.png)
-
-### Laporan
-![Laporan](screenshots/laporan.png)
-
-## 👨‍💻 Developer
-
-- **Nama**: [Nama Anda]
-- **Email**: [Email Anda]
-- **GitHub**: [Username GitHub Anda]
-
 ## 📄 License
 
 MIT License - Bebas digunakan untuk pembelajaran
